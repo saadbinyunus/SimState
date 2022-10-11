@@ -1,0 +1,125 @@
+#include <stdlib.h>
+#include <stdio.h>
+
+#define MAX_STATES 8
+/*
+A C F
+B D C
+C B H
+D D E
+E F G
+F G B
+G H A
+H A D
+
+Your starting state is: D 
+*/
+
+typedef struct statemachine{
+  char * name;
+  struct statemachine *next0;
+  struct statemachine *next1;
+
+}state;
+
+/*Array of states defining the finite state machine
+Each index of the Array has 3 elements that is defined inside the struct*/
+
+state fsm[MAX_STATES];
+
+
+void initialize_states(){
+  //State 0
+  fsm[0].name="A";
+  fsm[0].next0 = fsm + 2;//C
+  fsm[0].next1 = fsm + 5;//F
+
+   //State 1
+  fsm[1].name="B";
+  fsm[1].next0 = fsm + 3;//D
+  fsm[1].next1 = fsm + 2;//C
+  
+   //State 2
+  fsm[2].name="C";
+  fsm[2].next0 = fsm + 1;//B
+  fsm[2].next1 = fsm + 7;//H
+  
+   //State 3
+  fsm[3].name="D";
+  fsm[3].next0 = fsm + 3;//D
+  fsm[3].next1 = fsm + 4;//E
+  
+   //State 4
+  fsm[4].name="E";
+  fsm[4].next0 = fsm + 5;//F
+  fsm[4].next1 = fsm + 6;//G
+
+   //State 5
+  fsm[5].name="F";
+  fsm[5].next0 = fsm + 6;//G
+  fsm[5].next1 = fsm + 1;//B
+
+   //State 6
+  fsm[6].name="G";
+  fsm[6].next0 = fsm + 7;//H
+  fsm[6].next1 = fsm + 0;//A
+
+   //State 7
+  fsm[7].name="H";
+  fsm[7].next0 = fsm + 0;//A
+  fsm[7].next1 = fsm + 3;//D
+}
+
+void print(){
+  int i;
+  for(i=0; i < MAX_STATES; i++){
+    fprintf(stdout,"%s %s %s\n",fsm[i].name, fsm[i].next0->name, fsm[i].next1->name );
+  }
+
+}
+
+/*void change(){
+  
+    
+  if(input[2] == '0')
+    current.next0=fsm + input[4]-65;
+  else if(input[2] == '1')
+    current.next1=fsm + input[4]-65;
+
+      }
+*/
+int main(int argc, char * argv[])
+{
+
+  char input[5];
+  state *current = fsm + 3;
+  initialize_states();
+  printf("%s\n", current->name);
+  printf("\n");
+  print();
+  
+  int i;
+  //SHIFTING OF STATES OCCURS HERE
+  for(i=0;i<20; i++){
+    scanf("%s",&input[i]);
+  if(input[i] == 'p'){
+      print();
+    }
+  if(input[i] == '0'){
+    fprintf(stdout, "%s\n",current->next0->name);
+    current= current->next0;
+
+  }
+  if(input[i] == '1'){
+    fprintf(stdout, "%s\n",current->next1->name);
+    current= current->next1;
+ 
+  }
+  if(input[i] == 'c'){
+     if(input[2] == '0')
+    current->next0=fsm + input[4]-65;
+  else if(input[2] == '1')
+    current->next1=fsm + input[4]-65;
+  }}
+    exit(0);
+}
